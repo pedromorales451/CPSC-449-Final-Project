@@ -16,7 +16,9 @@ or
 ```python3 -m venv myenv```
 
 * Install dependencies from requirements.txt
-```pip install -r requirements.txt```
+```
+pip install -r requirements.txt
+```
 
 # MongoDB Prerequisites
 * create a new database called "bookstore"
@@ -25,6 +27,8 @@ or
 
 # Run
 Run using uvicorn 
-```uvicorn bookstore.main:app --reload```
+```
+uvicorn bookstore.main:app --reload
+```
 
 
