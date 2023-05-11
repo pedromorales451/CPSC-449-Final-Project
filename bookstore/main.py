@@ -19,6 +19,7 @@ class Book(BaseModel):
     description: str
     price: float
     stock: int
+    numberOfSales: int
 
 @app.get("/")
 def index():
@@ -31,3 +32,14 @@ async def books() -> List[Book]:
     return result
 
 
+@app.post("/create-book/")
+async def create_book(book: Book):
+    try:
+        # perform insert_one() asynchronously, 
+        # convert book to dict before insertion
+        result = await collection.insert_one(dict(book))
+
+        # return the inserted object id 
+        return {"inserted_id": str(result.inserted_id)}
+    except DuplicateKeyError:
+        return {"error": "Duplicate key error!"}
