@@ -40,7 +40,7 @@ async def getbook(book_id: int) -> List[Book]:
     if(book_id >=0 and book_id <=1):
         result = await collection.find({"book_id": book_id}).to_list(length=100)
     else: 
-        result=[]
+        result={"error": "no book by that id found"}
     return result
 
 #●	POST /books: Adds a new book to the store  
