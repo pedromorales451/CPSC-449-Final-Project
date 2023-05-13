@@ -4,6 +4,9 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from pymongo import MongoClient
+from pymongo.collection import Collection
+from bson import BSON, ObjectId
+from bson.son import SON
 from pymongo.errors import DuplicateKeyError, OperationFailure
 from motor.motor_asyncio import AsyncIOMotorClient
 from random import randint
@@ -43,6 +46,49 @@ async def books() -> List[Book]:
     result = await collection.find().to_list(length=100)
     print(result)
         
+    return result
+
+#●	GET /books/total: The total number of books in the store
+@app.get("/books/total")
+async def get_total_books():
+    pipeline = [
+        SON({"$count": "totalBooks"})
+    ]
+    result = await collection.aggregate(pipeline).to_list(length=1)
+    return result[0] if result else {"totalBooks": 0}
+
+#●	GET /books/bestsellers: Top 5 bestselling books
+@app.get("/books/bestsellers")
+async def get_bestsellers():
+    try:
+        pipeline = [
+            {"$sort": {"numberOfSales": -1}},
+            {"$limit": 5}
+        ]
+        result = await collection.aggregate(pipeline).to_list(length=5)
+
+        # ObjectId is not iterable so convert it to a string
+        for book in result:
+            book["_id"] = str(book["_id"])
+        return result
+    except Exception as e:
+        print("Error retrieving bestsellers:", str(e))
+        return {"error": "An error occurred while retrieving bestsellers"}
+
+#●	GET /books/top-authors: Top 5 authors with the most books in the store
+@app.get("/books/top-authors")
+async def get_top_authors():
+    pipeline = [
+        SON({
+            "$group": {
+                "_id": "$author",
+                "bookCount": {"$sum": 1}
+            }
+        }),
+        SON({"$sort": {"bookCount": -1}}),
+        SON({"$limit": 5})
+    ]
+    result = await collection.aggregate(pipeline).to_list(length=5)
     return result
 
 #●	GET /books/{book_id}: Retrieves a specific book by ID
@@ -108,7 +154,8 @@ async def create_book():
 #●	PUT /books/{book_id}: Updates an existing book by ID
 @app.put("/books/{book_id}")
 async def update_book(book_id:int)->List[Book]:
-    collection.update_one({"book_id": book_id}, {"$set":{"stock":4}})
+    print("YOU ARE TRYING THIS ID..", book_id)
+    collection.update_one({"book_id": book_id}, {"$set":{"stock":69}})
     result = await collection.find({"book_id": book_id}).to_list(length=100)
     return result
 
