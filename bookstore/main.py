@@ -160,8 +160,16 @@ async def update_book(book_id:int)->List[Book]:
     return result
 
 #●	DELETE /books/{book_id}: Deletes a book from the store by ID
+@app.delete("/books/delete/{book_id}")
+async def delete_book(book_id:int):
+    
+    collection.delete_one({"book_id": book_id})
+    return {"Deleted: ": book_id}
+
+
+
 #●	GET /search?title={}&author={}&min_price={}&max_price={}: Searches for books by title, author, and price range
 
 @app.get("/search?title={}&author={}&min_price={}&max_price={}: Searches for books by title, author, and price range")
-async def search():
+async def search(title:str, author:str,minp:float, maxp:float):
     return []
