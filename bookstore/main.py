@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from fastapi import Body, FastAPI, Path, Form
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -33,6 +33,17 @@ class Book(BaseModel):
     price: float
     stock: int
     numberOfSales: int
+    book_id: int
+
+
+# needs work 
+class UpdateBook(BaseModel):
+    title: Optional[str] = None
+    author: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[float] = None
+    stock: Optional[int] = None
+    numberOfSales: Optional[int] = None
     book_id: int
 
 
@@ -135,12 +146,18 @@ async def create_book_form(
             book_id=randint(1000, 9999)
         )
 
+        # check if a book with book_id already exists
+        duplicate_result = await collection.find_one({"book_id": book.book_id})
+
+        # book already exists, raise error
+        if duplicate_result: 
+            raise DuplicateKeyError("Duplicate key error!")
+        
+        
         # perform insert_one() asynchronously, 
         # convert book to dict before insertion
-        '''result = await db.collection.insert_one(dict(book))''' #(collection.insert_one may suffice)
         result = await collection.insert_one(dict(book))
         
-
         # return the inserted object id 
         return {"inserted_id": str(result.inserted_id)}
     except DuplicateKeyError:
@@ -162,11 +179,13 @@ async def update_book(book_id:int)->List[Book]:
 #●	DELETE /books/{book_id}: Deletes a book from the store by ID
 @app.delete("/books/delete/{book_id}")
 async def delete_book(book_id:int):
-    
-    collection.delete_one({"book_id": book_id})
-    return {"Deleted: ": book_id}
+    result = await collection.delete_one({"book_id": book_id})
 
+    # Book was not found, therefore not deleted 
+    if result.deleted_count == 0:
+        return {"error" : "Book not found!"}
 
+    return {"Deleted": book_id}
 
 #●	GET /search?title={}&author={}&min_price={}&max_price={}: Searches for books by title, author, and price range
 
