@@ -1,8 +1,8 @@
 from typing import List, Optional
-from fastapi import Body, FastAPI, Path, Form
+from fastapi import Body, FastAPI, Path, Form, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from bson import BSON, ObjectId
@@ -30,20 +30,18 @@ class Book(BaseModel):
     title: str
     author: str
     description: str
-    price: float
-    stock: int
-    numberOfSales: int
+    price: float = Field(..., ge=0)  # Non-negative constraint
+    stock: int = Field(..., ge=0)   # Non-negative constraint
+    numberOfSales: int = Field(..., ge=0)   # Non-negative constraint
     book_id: int
-
-
-# needs work 
+ 
 class UpdateBook(BaseModel):
     title: Optional[str] = None
     author: Optional[str] = None
     description: Optional[str] = None
-    price: Optional[float] = None
-    stock: Optional[int] = None
-    numberOfSales: Optional[int] = None
+    price: Optional[float] = Field(..., ge=0)  # Non-negative constraint
+    stock: Optional[int] = Field(..., ge=0)   # Non-negative constraint
+    numberOfSales: Optional[int] = Field(..., ge=0)   # Non-negative constraint
 
 @app.get("/")
 async def index():
@@ -122,6 +120,8 @@ async def create_book(book: Book):
         return {"inserted_id": str(result.inserted_id)}
     except DuplicateKeyError:
         return {"error": "Duplicate key error!"}
+    except Exception as e:
+        return {"error": "Please fix any negative input!"}
 
 #●	POST /create-book/form: Adds a new book to the store using create.html form
 @app.post("/create-book/form")
@@ -131,18 +131,22 @@ async def create_book_form(
     description: str = Form(...),
     price: float = Form(...),
     stock: int = Form(...),
-    numberOfSales: int = Form(...)
+    numberOfSales: int = Form(...),
+    book_id: int = Form(...)
 ):
     try:
-        book = Book(
-            title=title,
-            author=author,
-            description=description,
-            price=price,
-            stock=stock,
-            numberOfSales=numberOfSales,
-            book_id=randint(1000, 9999)
-        )
+        try:
+            book = Book(
+                title=title,
+                author=author,
+                description=description,
+                price=price,
+                stock=stock,
+                numberOfSales=numberOfSales,
+                book_id=book_id
+            )
+        except:
+            return {"error": "Please ensure price, stock, and numberOfSales are non-negative!"}
 
         # check if a book with book_id already exists
         duplicate_result = await collection.find_one({"book_id": book.book_id})
@@ -168,12 +172,6 @@ async def create_book():
 
 #   PUT /books/{book_id}: Updates an existing book by ID
 @app.put("/books/{book_id}")
-<<<<<<< HEAD
-async def update_book(book_id:int)->List[Book]:
-    collection.update_one({"book_id": book_id}, {"$set":{"stock":69}})
-    result = await collection.find({"book_id": book_id}).to_list(length=100)
-    return result
-=======
 async def update_book(book_id:int, book: UpdateBook):
     # check if a book with book_id exists
     find_result = await collection.find_one({"book_id": book_id})
@@ -209,7 +207,6 @@ async def update_book(book_id:int, book: UpdateBook):
 
     # return the number of books modified by update_one()
     return {"Modified": result.modified_count}
->>>>>>> a9eee996740d706a8c7876a73060b9c1c9f3e044
 
 #●	DELETE /books/{book_id}: Deletes a book from the store by ID
 @app.delete("/books/delete/{book_id}")
@@ -222,8 +219,38 @@ async def delete_book(book_id:int):
 
     return {"Deleted": book_id}
 
-#●	GET /search?title={}&author={}&min_price={}&max_price={}: Searches for books by title, author, and price range
+#●	GET /search?title=<title_input>&author=<author_input>&min_price=<min_input>&max_price=<max_input>: Searches for books by title, author, and price range
+@app.get("/search")
+async def search_books(request: Request):
+    title = request.query_params.get("title")
+    author = request.query_params.get("author")
+    min_price = request.query_params.get("min_price")
+    max_price = request.query_params.get("max_price")
 
-@app.get("/search?title={}&author={}&min_price={}&max_price={}: Searches for books by title, author, and price range")
-async def search(title:str, author:str,minp:float, maxp:float):
-    return []
+    query = {}
+
+    if title:
+        query["title"] = title
+
+    if author:
+        query["author"] = author
+
+    if min_price is not None and max_price is not None:
+        query["price"] = {"$gte": float(min_price), "$lte": float(max_price)}
+    elif min_price is not None:
+        query["price"] = {"$gte": float(min_price)}
+    elif max_price is not None:
+        query["price"] = {"$lte": float(max_price)}
+
+    result = await collection.find(query).to_list(length=100)
+
+    # ObjectId is not iterable so convert it to a string
+    for book in result:
+        book["_id"] = str(book["_id"])
+
+    return result
+
+# Serve the book_search.html file
+@app.get("/book-search")
+async def book_search():
+    return FileResponse(os.path.join(static_folder, "search.html"))
