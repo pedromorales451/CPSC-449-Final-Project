@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from fastapi import Body, FastAPI, Path, Form
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -35,6 +35,15 @@ class Book(BaseModel):
     numberOfSales: int
     book_id: int
 
+
+# needs work 
+class UpdateBook(BaseModel):
+    title: Optional[str] = None
+    author: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[float] = None
+    stock: Optional[int] = None
+    numberOfSales: Optional[int] = None
 
 @app.get("/")
 async def index():
@@ -135,12 +144,18 @@ async def create_book_form(
             book_id=randint(1000, 9999)
         )
 
+        # check if a book with book_id already exists
+        duplicate_result = await collection.find_one({"book_id": book.book_id})
+
+        # book already exists, raise error
+        if duplicate_result: 
+            raise DuplicateKeyError("Duplicate key error!")
+        
+        
         # perform insert_one() asynchronously, 
         # convert book to dict before insertion
-        '''result = await db.collection.insert_one(dict(book))''' #(collection.insert_one may suffice)
         result = await collection.insert_one(dict(book))
         
-
         # return the inserted object id 
         return {"inserted_id": str(result.inserted_id)}
     except DuplicateKeyError:
@@ -151,16 +166,64 @@ async def create_book_form(
 async def create_book():
     return FileResponse(os.path.join(static_folder, "create.html"))
 
-#●	PUT /books/{book_id}: Updates an existing book by ID
+#   PUT /books/{book_id}: Updates an existing book by ID
 @app.put("/books/{book_id}")
+<<<<<<< HEAD
 async def update_book(book_id:int)->List[Book]:
     collection.update_one({"book_id": book_id}, {"$set":{"stock":69}})
     result = await collection.find({"book_id": book_id}).to_list(length=100)
     return result
+=======
+async def update_book(book_id:int, book: UpdateBook):
+    # check if a book with book_id exists
+    find_result = await collection.find_one({"book_id": book_id})
+
+    # book does not exist, raise error
+    if find_result == None: 
+        return {"Error": "Book does not exist!"}
+    
+    # dict to store modified data
+    updated_data = {}
+
+    # if the field value != None, add the field and its value to updated_data
+    if book.title != None:
+        updated_data['title'] = book.title 
+
+    if book.author != None:
+        updated_data['author'] = book.author 
+
+    if book.description != None:
+        updated_data['description'] = book.description 
+        
+    if book.price != None:
+        updated_data['price'] = book.price 
+
+    if book.stock != None:
+        updated_data['stock'] = book.stock 
+
+    if book.numberOfSales != None:
+        updated_data['numberOfSales'] = book.numberOfSales 
+    
+    # update the book with the new values
+    result = await collection.update_one({'book_id': book_id}, {'$set': updated_data})
+
+    # return the number of books modified by update_one()
+    return {"Modified": result.modified_count}
+>>>>>>> a9eee996740d706a8c7876a73060b9c1c9f3e044
 
 #●	DELETE /books/{book_id}: Deletes a book from the store by ID
+@app.delete("/books/delete/{book_id}")
+async def delete_book(book_id:int):
+    result = await collection.delete_one({"book_id": book_id})
+
+    # Book was not found, therefore not deleted 
+    if result.deleted_count == 0:
+        return {"error" : "Book not found!"}
+
+    return {"Deleted": book_id}
+
 #●	GET /search?title={}&author={}&min_price={}&max_price={}: Searches for books by title, author, and price range
 
 @app.get("/search?title={}&author={}&min_price={}&max_price={}: Searches for books by title, author, and price range")
-async def search():
+async def search(title:str, author:str,minp:float, maxp:float):
     return []
