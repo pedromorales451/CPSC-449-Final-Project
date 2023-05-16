@@ -154,7 +154,6 @@ async def create_book():
 #●	PUT /books/{book_id}: Updates an existing book by ID
 @app.put("/books/{book_id}")
 async def update_book(book_id:int)->List[Book]:
-    print("YOU ARE TRYING THIS ID..", book_id)
     collection.update_one({"book_id": book_id}, {"$set":{"stock":69}})
     result = await collection.find({"book_id": book_id}).to_list(length=100)
     return result
