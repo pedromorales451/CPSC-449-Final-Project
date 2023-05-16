@@ -44,8 +44,6 @@ class UpdateBook(BaseModel):
     price: Optional[float] = None
     stock: Optional[int] = None
     numberOfSales: Optional[int] = None
-    book_id: int
-
 
 @app.get("/")
 async def index():
@@ -168,13 +166,43 @@ async def create_book_form(
 async def create_book():
     return FileResponse(os.path.join(static_folder, "create.html"))
 
-#●	PUT /books/{book_id}: Updates an existing book by ID
+#   PUT /books/{book_id}: Updates an existing book by ID
 @app.put("/books/{book_id}")
-async def update_book(book_id:int)->List[Book]:
-    print("YOU ARE TRYING THIS ID..", book_id)
-    collection.update_one({"book_id": book_id}, {"$set":{"stock":69}})
-    result = await collection.find({"book_id": book_id}).to_list(length=100)
-    return result
+async def update_book(book_id:int, book: UpdateBook):
+    # check if a book with book_id exists
+    find_result = await collection.find_one({"book_id": book_id})
+
+    # book does not exist, raise error
+    if find_result == None: 
+        return {"Error": "Book does not exist!"}
+    
+    # dict to store modified data
+    updated_data = {}
+
+    # if the field value != None, add the field and its value to updated_data
+    if book.title != None:
+        updated_data['title'] = book.title 
+
+    if book.author != None:
+        updated_data['author'] = book.author 
+
+    if book.description != None:
+        updated_data['description'] = book.description 
+        
+    if book.price != None:
+        updated_data['price'] = book.price 
+
+    if book.stock != None:
+        updated_data['stock'] = book.stock 
+
+    if book.numberOfSales != None:
+        updated_data['numberOfSales'] = book.numberOfSales 
+    
+    # update the book with the new values
+    result = await collection.update_one({'book_id': book_id}, {'$set': updated_data})
+
+    # return the number of books modified by update_one()
+    return {"Modified": result.modified_count}
 
 #●	DELETE /books/{book_id}: Deletes a book from the store by ID
 @app.delete("/books/delete/{book_id}")
