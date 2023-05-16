@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Search</title>
+</head>
+<body>
+    <h1>Book Search</h1>
+    <form action="/search" method="get" id="searchForm">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title"><br><br>
+        
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author"><br><br>
+        
+        <label for="min_price">Minimum Price:</label>
+        <input type="number" id="min_price" name="min_price" value ="0"><br><br>
+        
+        <label for="max_price">Maximum Price:</label>
+        <input type="number" id="max_price" name="max_price" value="9999"><br><br>
+        
+        <input type="submit" value="Search">
+    </form>
+    <script>
+        document.getElementById("searchForm").addEventListener("submit", function(event) {
+            var minPriceInput = document.getElementById("min_price");
+            var maxPriceInput = document.getElementById("max_price");
+
+            if (minPriceInput.value === "") {
+                minPriceInput.value = "0";
+            }
+
+            if (maxPriceInput.value === "") {
+                maxPriceInput.value = "9999";
+            }
+        });
+    </script>
+</body>
+</html>
