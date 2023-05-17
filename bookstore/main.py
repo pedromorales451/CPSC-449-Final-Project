@@ -39,9 +39,9 @@ class UpdateBook(BaseModel):
     title: Optional[str] = None
     author: Optional[str] = None
     description: Optional[str] = None
-    price: Optional[float] = Field(..., ge=0)  # Non-negative constraint
-    stock: Optional[int] = Field(..., ge=0)   # Non-negative constraint
-    numberOfSales: Optional[int] = Field(..., ge=0)   # Non-negative constraint
+    price: Optional[float] = Field(None, ge=0)  # Non-negative constraint
+    stock: Optional[int] = Field(None, ge=0)   # Non-negative constraint
+    numberOfSales: Optional[int] = Field(None, ge=0)   # Non-negative constraint
 
 @app.get("/")
 async def index():
