@@ -43,4 +43,7 @@ Run using uvicorn
 uvicorn bookstore.main:app --reload
 ```
 In the terminal, a hyperlink should appear. Hover over the http link and follow the link to view the application.
+```
+Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+```
 <img width="688" alt="Pasted Graphic" src="https://github.com/pedromorales451/CPSC-449-Final-Project/blob/main/viewappterminal.png">
