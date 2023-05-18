@@ -33,7 +33,7 @@ class Book(BaseModel):
     price: float = Field(..., ge=0)  # Non-negative constraint
     stock: int = Field(..., ge=0)   # Non-negative constraint
     numberOfSales: int = Field(..., ge=0)   # Non-negative constraint
-    book_id: int
+    book_id: int = Field(..., ge=0)     # Non-negative constraint
  
 class UpdateBook(BaseModel):
     title: Optional[str] = None
