@@ -262,7 +262,7 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
     }
 ]
 ```
-## Create Book
+## POST /create-book/
 ### POSTMAN
 1. Create a new HTTP request and set the method to POST.
 2. Set the url to ```http://127.0.0.1:8000/create-book/```
