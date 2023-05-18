@@ -169,9 +169,7 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 ### Response Body
 * No books were found.
 ```
-{
-    []
-}
+[]
 ```
 
 * You will recieve a response encoded in JSON:
