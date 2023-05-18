@@ -55,11 +55,6 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 3. Click the "Send" button.
 <img width="952" alt="image" src="https://github.com/pedromorales451/CPSC-449-Final-Project/assets/70175052/a237f789-1d96-4916-8481-463938e94e14">
 
-### HTML Form
-1. Cick the "View Books" button.
-![image](https://github.com/pedromorales451/CPSC-449-Final-Project/assets/70175052/7d9bc09e-07a2-4e3f-824f-0c1f657c12f3)
-
-
 ### Response Body
 * A list of books, or an empty list [] if the "books" collection doesn't contain any books. 
 ```
