@@ -280,6 +280,7 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 } 
 ```
 Into JSON text box.
+
 5. Click the "Send" button
 <img width="947" alt="image" src="screenshots/postcreatebook.png">
 
