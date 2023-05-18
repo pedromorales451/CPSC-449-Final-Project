@@ -196,7 +196,7 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 
 <img width="947" alt="image" src="screenshots/books-total.png">
 
-###Response Body
+### Response Body
 * You will recieve a response encoded in JSON:
 ```
 {
@@ -212,7 +212,7 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 
 <img width="947" alt="image" src="screenshots/bestsellers.png">
 
-###Response Body
+### Response Body
 * You will recieve a response encoded in JSON:
 * A list of the top 5 bestselling books in the database
 ```
@@ -247,7 +247,7 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 
 <img width="947" alt="image" src="screenshots/top-authors.png">
 
-###Response Body
+### Response Body
 * You will recieve a response encoded in JSON:
 * A list of the top 5 authors found in the database
  ```
@@ -279,9 +279,10 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 Into JSON text box.
 5. Click the "Send" button
 <img width="947" alt="image" src="screenshots/postcreatebook.png">
-###Response Body
+### Response Body
+
 * You will recieve a response encoded in JSON:
-* Notification the book was insertes
+* Notification the book was inserted
 
 ```
 {
