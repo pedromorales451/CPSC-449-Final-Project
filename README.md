@@ -189,6 +189,76 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 ```
 
 ## GET /books/total The total number of books in the store
+### POSTMAN
+1.Create a new HTTP request and set the method to GET.
+2. Set the url to ```http://127.0.0.1:8000/books/total```
+3. Click the "Send" button
+
+<img width="947" alt="image" src="screenshots/books-total.png">
+
+###Response Body
+* You will recieve a response encoded in JSON:
+```
+{
+    "totalBooks": 2
+}
+```
+
 ## The top 5 bestselling books
+### POSTMAN
+1. Create a new HTTP request and set the method to GET.
+2. Set the url to ```http://127.0.0.1:8000/books/bestsellers```
+3. Click the "Send" button.
+
+<img width="947" alt="image" src="screenshots/bestsellers.png">
+
+###Response Body
+* You will recieve a response encoded in JSON:
+```
+[
+    {
+        "_id": "64642e5c9f89e9dc4d12523f",
+        "title": "nani",
+        "author": "nani",
+        "description": "dsfs",
+        "price": 12.0,
+        "stock": 14,
+        "numberOfSales": 20,
+        "book_id": 66
+    },
+    {
+        "_id": "645e7dd27b688120d67f0004",
+        "title": "string",
+        "author": "string",
+        "description": "string",
+        "price": 0.0,
+        "stock": 0,
+        "numberOfSales": 0,
+        "book_id": 1
+    }
+]
+```
 ## The top 5 authors with the most books in the store
+### POSTMAN
+1. Create a new HTTP request and set the method to GET.
+2. Set the url to ```http://127.0.0.1:8000/books/top-authors```
+3. Click the "Send" button.
+
+<img width="947" alt="image" src="screenshots/top-authors.png">
+
+###Response Body
+* You will recieve a response encoded in JSON:
+ ```
+ [
+    {
+        "_id": "string",
+        "bookCount": 1
+    },
+    {
+        "_id": "nani",
+        "bookCount": 1
+    }
+]
+```
+
 For further demonstrations, please watch the demo video. The application also has a few user-interfaces to help showcase each functionality.
