@@ -39,9 +39,9 @@ class UpdateBook(BaseModel):
     title: Optional[str] = None
     author: Optional[str] = None
     description: Optional[str] = None
-    price: Optional[float] = Field(..., ge=0)  # Non-negative constraint
-    stock: Optional[int] = Field(..., ge=0)   # Non-negative constraint
-    numberOfSales: Optional[int] = Field(..., ge=0)   # Non-negative constraint
+    price: Optional[float] = Field(None, ge=0)  # Non-negative constraint
+    stock: Optional[int] = Field(None, ge=0)   # Non-negative constraint
+    numberOfSales: Optional[int] = Field(None, ge=0)   # Non-negative constraint
 
 @app.get("/")
 async def index():
@@ -114,6 +114,13 @@ async def create_book(book: Book):
         # perform insert_one() asynchronously, 
         # convert book to dict before insertion
         '''result = await db.collection.insert_one(dict(book))''' #(collection.insert_one may suffice)
+        # check if a book with book_id already exists
+        duplicate_result = await collection.find_one({"book_id": book.book_id})
+
+        # book already exists, raise error
+        if duplicate_result: 
+            raise DuplicateKeyError("Duplicate key error!")
+        
         result = await collection.insert_one(dict(book))
 
         # return the inserted object id 
