@@ -267,7 +267,9 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 1. Create a new HTTP request and set the method to POST.
 2. Set the url to ```http://127.0.0.1:8000/create-book/```
 3. Select body, select raw, select JSON.
-4. Insert ```{
+4. Insert 
+```
+{
   "title": "string",
   "author": "string",
   "description": "string",
@@ -275,7 +277,8 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
   "stock": 0,
   "numberOfSales": 0,
   "book_id": 0
-} ```
+} 
+```
 Into JSON text box.
 5. Click the "Send" button
 <img width="947" alt="image" src="screenshots/postcreatebook.png">
