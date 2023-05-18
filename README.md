@@ -46,7 +46,7 @@ In the terminal, a hyperlink should appear. Hover over the http link and follow 
 ```
 Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 ```
-<img width="688" alt="Pasted Graphic" src="https://github.com/pedromorales451/CPSC-449-Final-Project/blob/main/viewappterminal.png">
+<img width="688" alt="Pasted Graphic" src="screenshots/viewappterminal.png">
 
 
 ## PUT /books/{book_id}
@@ -71,5 +71,28 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 ```
 {
     "Modified": 1
+}
+```
+
+## DELETE /books/delete/{book_id}
+### Postman
+1. Create a new HTTP request and set the method to DELETE.
+2. Set the URL to ```http://127.0.0.1:8000/books/delete/{book_id}``` where {book_id} is the ID of the book to update. 
+3. Click the "Send" button.
+
+<img width="947" alt="image" src="screenshots/delete.png">
+
+### Response Body
+* An error message indicating that the requested book does not exist.
+```
+{
+    "Error": "Book not found!"
+}
+```
+
+* The number of book updates. A value of 1 indicates that the requested book has been updated, while a value of 0 means that no books were updated.
+```
+{
+    "Deleted": {book_id}
 }
 ```
