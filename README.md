@@ -48,6 +48,71 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 ```
 <img width="688" alt="Pasted Graphic" src="screenshots/viewappterminal.png">
 
+## GET /books
+### Postman 
+1. Create a new HTTP request and set the method to GET.
+2. Set the url to ```http://127.0.0.1:8000/books/```
+3. Click the "Send" button.
+<img width="952" alt="image" src="https://github.com/pedromorales451/CPSC-449-Final-Project/assets/70175052/a237f789-1d96-4916-8481-463938e94e14">
+
+### HTML Form
+1. Cick the "View Books" button.
+![image](https://github.com/pedromorales451/CPSC-449-Final-Project/assets/70175052/7d9bc09e-07a2-4e3f-824f-0c1f657c12f3)
+
+
+### Response Body
+* A list of books, or an empty list [] if the "books" collection doesn't contain any books. 
+```
+[
+    {
+        "title": "The cat in the hat",
+        "author": "Dr. Seuss",
+        "description": "A book about a cat in a hat",
+        "price": 10.99,
+        "stock": 10,
+        "numberOfSales": 200,
+        "book_id": 3492
+    },
+    {
+        "title": "Misery",
+        "author": "Stephen King",
+        "description": "Misery is an American psychological horror thriller novel written by Stephen King.",
+        "price": 7.98,
+        "stock": 10,
+        "numberOfSales": 124,
+        "book_id": 1170
+    }
+]
+```
+
+## GET /books/{book_id}
+### Postman
+1. Create a new HTTP request and set the method to GET.
+2. Set the URL to ```http://127.0.0.1:8000/books/{book_id}``` where {book_id} is the ID of the book to retrieve.
+3. Click the "Send" button.
+
+<img width="948" alt="image" src="https://github.com/pedromorales451/CPSC-449-Final-Project/assets/70175052/1b437064-c24f-4fc3-9726-b6cf842a5cfc">
+
+### Response Body
+* A list containing a single retrieved book with ID {book_id}.
+```
+[
+    {
+            "title": "Misery",
+            "author": "Stephen King",
+            "description": "Misery is an American psychological horror thriller novel written by Stephen King.",
+            "price": 7.98,
+            "stock": 10,
+            "numberOfSales": 124,
+            "book_id": 1170
+    }
+]
+```
+
+* An empty list if the the book could not be retrieved (it doesn't exist).
+```
+[]
+```
 
 ## PUT /books/{book_id}
 ### Postman
@@ -77,7 +142,7 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 ## DELETE /books/delete/{book_id}
 ### Postman
 1. Create a new HTTP request and set the method to DELETE.
-2. Set the URL to ```http://127.0.0.1:8000/books/delete/{book_id}``` where {book_id} is the ID of the book to update. 
+2. Set the URL to ```http://127.0.0.1:8000/books/delete/{book_id}``` where {book_id} is the ID of the book to delete. 
 3. Click the "Send" button.
 
 <img width="947" alt="image" src="screenshots/delete.png">
@@ -130,4 +195,7 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 }
 ```
 
+## GET /books/total The total number of books in the store
+## The top 5 bestselling books
+## The top 5 authors with the most books in the store
 For further demonstrations, please watch the demo video. The application also has a few user-interfaces to help showcase each functionality.
