@@ -90,9 +90,44 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 }
 ```
 
-* The number of book updates. A value of 1 indicates that the requested book has been updated, while a value of 0 means that no books were updated.
+* If successful, you will get a message indicating deletion.
 ```
 {
     "Deleted": {book_id}
 }
 ```
+
+## GET /search?title=<input_title>&min_price=<min_price>&max_price=<max_price>
+### Postman
+1. Create a new HTTP request and set the method to GET.
+2. Set the URL to ```http://127.0.0.1:8000/search?title=<input_title>&min_price=<min_price>&max_price=<max_price>``` using title, minimum price, and maximum price for each respective parameter Use %20 to URL encode spaces in the title portion. 
+3. EXAMPLE: localhost:8000/search?title=The%20Great%20Gatsby%20(New)&min_price=1&max_price=1000
+4. Click the "Send" button.
+
+<img width="947" alt="image" src="screenshots/search.png">
+
+### Response Body
+* No books were found.
+```
+{
+    []
+}
+```
+
+* You will recieve a response encoded in JSON:
+```
+{
+    {
+        "_id": "6463cf7acc9f426091122283",
+        "title": "The Great Gatsby (New)",
+        "author": "F. Scott Fitzgerald (New)",
+        "description": "A tragic love story set in the roaring 1920s. (New)",
+        "price": 123.0,
+        "stock": 3,
+        "numberOfSales": 6,
+        "book_id": 9093
+    }
+}
+```
+
+For further demonstrations, please watch the demo video. The application also has a few user-interfaces to help showcase each functionality.
