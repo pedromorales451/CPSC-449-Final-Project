@@ -214,6 +214,7 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 
 ###Response Body
 * You will recieve a response encoded in JSON:
+* A list of the top 5 bestselling books in the database
 ```
 [
     {
@@ -248,6 +249,7 @@ Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 
 ###Response Body
 * You will recieve a response encoded in JSON:
+* A list of the top 5 authors found in the database
  ```
  [
     {
@@ -279,11 +281,17 @@ Into JSON text box.
 <img width="947" alt="image" src="screenshots/postcreatebook.png">
 ###Response Body
 * You will recieve a response encoded in JSON:
+* Notification the book was insertes
 
 ```
 {
     "inserted_id": "6465c32e04fa70a86f64c6da"
 }
 ```
-
+* An error message if book key already exists
+```
+{
+    "error": "Duplicate key error!"
+}
+```
 For further demonstrations, please watch the demo video. The application also has a few user-interfaces to help showcase each functionality.
